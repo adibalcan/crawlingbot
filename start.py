@@ -10,32 +10,17 @@ from utils import logutils, urlutils
 import gc
 import codecs
 sys.path.append('pyq')
-from pyq import pyqclient
 import json
-import redis
-
-# from pyq import pyqclient
-# pyq = pyqclient.PyQClient(config.pyqServer, config.pyqPort)
-from utils.queueconnection import redisQ,pyq, redisPop
+from utils import queueconnection
 
 
 poll = Poll([])
 
 # TEST WEBSITES
 websites = [
-            # '{"domain":"http://info-aschaffenburg.de"}',
-            # '{"domain":"http://3dhouse.ir"}',
-            # '{"domain":"http://tvblast.tv"}',
-            # '{"domain":"http://templatekunena.com"}',
-            # '{"domain":"http://unionvgf.com"}',
-            # '{"domain":"http://racheldinh.com"}',
-            # '{"domain":"http://thewebminer.com"}',
-            # '{"domain":"www.rakuten.co.jp"}',
-            # '{"domain":"http://www.webcentric.co.rs"}',
-            # '{"domain":"thewebminer.com"}',
-            # '{"domain":"fakenumber.org/australia/"}',
-            '{"domain":"http://pato.ro"}'
-            # '{"domain":"http://thewebminer.com"}'
+            '{"domain":"http://info-aschaffenburg.de"}',
+            '{"domain":"http://3dhouse.ir"}',
+            '{"domain":"http://tvblast.tv"}',
 ]
 
 # for i in range(0,1000):
@@ -70,10 +55,7 @@ def feeder():
                         website = ''
                 else:
                     try:
-                        if config.useRedis:
-                            website = redisPop()
-                        else:
-                            website = pyq.pop(config.seedCollection)
+                        website = queueconnection.pop(config.seedCollection)
                     except Exception as e:
                         logutils.log('Exception read queue', logutils.format_exception(e))
                         continue
@@ -105,11 +87,7 @@ def emergencyFeeder():
             item['domain'] = domain
             if 'alexarank' in website.initialMeta:
                 item['alexarank'] = website.initialMeta['alexarank']
-            if config.useRedis:
-                # pyq.push(config.seedCollection, json.dumps(item))
-                redisQ.lpush(config.seedCollection, json.dumps(item))
-            else:
-                pyq.push(config.seedCollection, json.dumps(item))
+            queueconnection.push(config.seedCollection, json.dumps(item))
 
 
 def doRestart(message):

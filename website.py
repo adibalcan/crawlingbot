@@ -7,21 +7,16 @@ from pprint import pprint
 import requests
 
 sys.path.append('pyq')
-from pyq import pyqclient
 from utils.robotexclusionrulesparser import RobotExclusionRulesParser
 from utils import logutils, urlutils, crawlutils, profileutil, listutils
 sys.path.append('filters')
-# from utils.pybloomd import BloomdClient
 from utils.bloomdClient import bloom
 import config
 # client = pymongo.MongoClient('52.27.98.41:27017')
 # database = client.twmbot
-from utils.queueconnection import redisQ,pyq
+from utils import queueconnection
 import json
-import redis
 import request
-
-# pyq = pyqclient.PyQClient(config.pyqServer, config.pyqPort)
 
 class Website:
     def __init__(self, startUrl, initialMeta = {}):
@@ -61,6 +56,8 @@ class Website:
             self.ended = False
 
         self.filters = [
+                            {'name': 'textratio'},
+                            {'name': 'title'},
                             {'name': 'keywords'},
                             {'name': 'description'},
                             {'name': 'numberofimages'},
@@ -71,7 +68,10 @@ class Website:
         for filter in self.filters:
             filter['mod'] = imp.import_module(filter['name'])
 
-        self.firstPageFilters =  [ ]
+        self.firstPageFilters =  [
+                                  {'name': 'encoding'}
+
+                                 ]
         for filter in self.firstPageFilters:
             filter['mod'] = imp.import_module(filter['name'])
 
@@ -212,11 +212,11 @@ class Website:
                 r = requests.post(config.elasticSearchEntity + '/' + result['domain'] + '/_update', data=json.dumps(updateData))
             else:
                 r = requests.put(config.elasticSearchEntity + '/' + result['domain'], data=json.dumps(result))
+            bloom.add(result['domain'])
             if config.debug: print(r.content)
         self.saveExternalUrls()
 
     def saveExternalUrls(self):
-
         if config.saveExternalUrls:
             externalDomains = [urlutils.getDomain(domain) for domain in self.externalLinks]
             print(externalDomains)
@@ -227,14 +227,11 @@ class Website:
 
             for domain in externalDomains:
                 schemaLessDomain = urlutils.removeSchema(domain)
-                if bloom.add(domain) and bloom.add(schemaLessDomain):
+                if bloom.add(domain):
                     item = {}
                     item['domain'] = schemaLessDomain
                     # pprint(item)
-                    if config.useRedis:
-                    # pyq.push(config.externalCollection, json.dumps(item), withIndex = True)
-                        redisQ.lpush(config.externalCollection, json.dumps(item))
-                    else:
-                        pyq.push(config.externalCollection, json.dumps(item), withIndex = True)
+                    queueconnection.push(config.externalCollection, json.dumps(item))
+
     def update(self):
         pass
