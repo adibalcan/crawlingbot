@@ -65,25 +65,7 @@ class Website:
             filter['mod'] = imp.import_module(filter['name'])
 
         self.firstPageFilters =  [
-                                  {'name': 'encoding'},
-                                  {'name': 'tech'},
-                                  # {'name': 'technew'},
-                                  {'name': 'isresponsive'},
-                                  {'name': 'isblog'},
-                                  {'name': 'topleveldomain'},
-                                  {'name': 'linkedin'},
-                                  {'name': 'haslinkedin'},
-                                  {'name': 'facebook'},
-                                  {'name': 'hasfacebook'},
-                                  {'name': 'twitter'},
-                                  {'name': 'hastwitter'},
-                                  {'name': 'language'},
-                                  {'name': 'femail'},
-                                  {'name': 'hasemail'},
-                                  {'name': 'phone'},
-                                  {'name': 'hasphone'},
-                                  {'name': 'iscompany'},
-                                  {'name': 'alexarank'}
+                                  {'name': 'encoding'}
                                  ]
         for filter in self.firstPageFilters:
             filter['mod'] = imp.import_module(filter['name'])
