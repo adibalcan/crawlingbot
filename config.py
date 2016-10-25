@@ -1,36 +1,39 @@
 debug = False
 log = False
 save = False
-elasticSearchMap = 'http://ELASTIC_SEARCH_HOST:9200/websites3'
+elasticSearchMap = 'http://ELSTIC_SEARCH_HOST:9200/websites3'
 elasticSearchEntity = elasticSearchMap + '/website3'
-botName = 'CRWLING_BOT'
-userAgent = 'Mozilla/5.0 (compatible; ' + botName + '/0.3; +http://example.com)'
+botName = 'CRAWLING_BOT'
+userAgent = 'Mozilla/5.0 (compatible; ' + botName + '/0.3; +http://crawlingbot.com)'
 maxPageSize = 1024 * 1024 # 1Mb
 maxPageDownloadTime = 5 # seconds
 maxWebsiteFails = 10
 runFilters = True
-useRedis = True
-pyqServer = 'PYQ_HOST'
+
+pybloomdServer = "PYBLOOM_SERVER"
+
+pyqServer = 'PYQ_SERVER'
 pyqPort = 3334
-redisServer = "REDIS_HOST"
+
+useRedis = True
+redisServer = "REDIS_SERVER"
 redisPort = 6379
-redisAuth = "REDIS_PASS" #redis password
+redisAuth = "REDIS_PASSWORD" #redis password
+
 minPollSize = 30
 threadsNumber = 10
 usedMemoryMaxPercent = 45
 reportInterval = 60
+
 # inital links
 seedCollection = 'website_2'
 # place where we save the external links
 saveExternalUrls = True
 externalCollection = 'website'
-requestMinIntervalForSameDomain = 0 #seconds
+requestMinIntervalForSameDomain = 1 #seconds
 pagesParsedPerSite = 1
 
-
-
 mode = 'intern'
-
 if mode == 'intern':
     #for internal
     seedCollection = 'website'

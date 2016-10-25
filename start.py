@@ -9,7 +9,6 @@ import config
 from utils import logutils, urlutils
 import gc
 import codecs
-sys.path.append('pyq')
 import json
 from utils import queueconnection
 
@@ -21,6 +20,12 @@ websites = [
             '{"domain":"http://info-aschaffenburg.de"}',
             '{"domain":"http://3dhouse.ir"}',
             '{"domain":"http://tvblast.tv"}',
+            '{"domain":"http://templatekunena.com"}',
+            '{"domain":"http://unionvgf.com"}',
+            '{"domain":"http://racheldinh.com"}',
+            '{"domain":"www.rakuten.co.jp"}',
+            '{"domain":"http://www.webcentric.co.rs"}',
+            '{"domain":"fakenumber.org/australia/"}'
 ]
 
 # for i in range(0,1000):

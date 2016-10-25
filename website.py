@@ -5,15 +5,11 @@ from collections import deque
 from pprint import pprint
 
 import requests
-
-sys.path.append('pyq')
 from utils.robotexclusionrulesparser import RobotExclusionRulesParser
 from utils import logutils, urlutils, crawlutils, profileutil, listutils
 sys.path.append('filters')
 from utils.bloomdClient import bloom
 import config
-# client = pymongo.MongoClient('52.27.98.41:27017')
-# database = client.twmbot
 from utils import queueconnection
 import json
 import request
@@ -69,8 +65,25 @@ class Website:
             filter['mod'] = imp.import_module(filter['name'])
 
         self.firstPageFilters =  [
-                                  {'name': 'encoding'}
-
+                                  {'name': 'encoding'},
+                                  {'name': 'tech'},
+                                  # {'name': 'technew'},
+                                  {'name': 'isresponsive'},
+                                  {'name': 'isblog'},
+                                  {'name': 'topleveldomain'},
+                                  {'name': 'linkedin'},
+                                  {'name': 'haslinkedin'},
+                                  {'name': 'facebook'},
+                                  {'name': 'hasfacebook'},
+                                  {'name': 'twitter'},
+                                  {'name': 'hastwitter'},
+                                  {'name': 'language'},
+                                  {'name': 'femail'},
+                                  {'name': 'hasemail'},
+                                  {'name': 'phone'},
+                                  {'name': 'hasphone'},
+                                  {'name': 'iscompany'},
+                                  {'name': 'alexarank'}
                                  ]
         for filter in self.firstPageFilters:
             filter['mod'] = imp.import_module(filter['name'])
@@ -198,10 +211,6 @@ class Website:
         if config.debug:
             pprint(result)
             # profileutil.profile.show()
-
-        # SAVE IN MONGO
-        # database.websites.insert(result)
-        # del result['_id']
 
         # Save / update in ES
         if config.save and len(result['parsedUrls']) > 0:

@@ -3,8 +3,9 @@ import json
 import config
 redisQ = redis.StrictRedis(config.redisServer, config.redisPort, db=0, password = config.redisAuth)
 
-from pyq import pyqclient
-pyq = pyqclient.PyQClient(config.pyqServer, config.pyqPort)
+if not config.useRedis:
+    from pyq import pyqclient
+    pyq = pyqclient.PyQClient(config.pyqServer, config.pyqPort)
 
 def pop(collection):
     if config.useRedis:
