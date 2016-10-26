@@ -2,7 +2,8 @@
 Python Generic Web Crawler
 
 ## Requirements
-Redis
+Redis,
+
 Bloomd Server ( https://github.com/armon/bloomd )
 
 ## Usage
